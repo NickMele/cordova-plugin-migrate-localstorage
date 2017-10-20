@@ -2,6 +2,12 @@
 
 @implementation MigrateLocalStorage
 
+#if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
+#define kDefaultPort 80
+#else
+#define kDefaultPort 8080
+#endif
+
 - (BOOL) copyFrom:(NSString*)src to:(NSString*)dest
 {
     NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -49,7 +55,9 @@
     target = [target stringByAppendingPathComponent:bundleIdentifier];
 #endif
 
-    target = [target stringByAppendingPathComponent:@"WebsiteData/LocalStorage/file__0.localstorage"];
+    NSString *portAsString = [NSString stringWithFormat:@"%d", kDefaultPort];
+    // target = [target stringByAppendingPathComponent:@"WebsiteData/LocalStorage/file__0.localstorage"];
+    target = [target stringByAppendingPathComponent:[[@"WebsiteData/LocalStorage/http_localhost_" stringByAppendingString:portAsString] stringByAppendingString:@".localstorage"]];
 
     // Only copy data if no existing localstorage data exists yet for wkwebview
     if (![[NSFileManager defaultManager] fileExistsAtPath:target]) {
