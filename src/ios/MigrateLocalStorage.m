@@ -2,11 +2,7 @@
 
 @implementation MigrateLocalStorage
 
-#if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
-#define kDefaultPort 80
-#else
 #define kDefaultPort 8080
-#endif
 
 - (BOOL) copyFrom:(NSString*)src to:(NSString*)dest
 {
